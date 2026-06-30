@@ -1,21 +1,25 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     java
     `maven-publish`
-    id("com.gradleup.shadow") version "9.3.2"
+    id("com.gradleup.shadow") version "9.4.3"
     id("xyz.jpenilla.run-paper") version "3.0.2"
-    id("io.freefair.lombok") version "8.4"
+    id("io.freefair.lombok") version "9.5.0"
     id("net.kyori.indra.git")
 }
 
+val group = property("group")
 val versionOnly = property("version").toString()
-val versionWithGit: String = versionOnly + "-${getGitHash()}"
+val versionWithGit: String = "${versionOnly}-${getGitSHashShort()}"
 
 allprojects {
     plugins.apply("io.freefair.lombok")
 
-    group = "cc.happyareabean"
-    version = versionWithGit
-    description = "SlimeHook is a paper plugin that utilize SlimeWorldManager/AdvancedSlimePaper for generating template world as an arena for several plugins. "
+    group = group
+    version = versionOnly
+    description =
+        "SlimeHook is a paper plugin that utilize SlimeWorldManager/AdvancedSlimePaper for generating template world as an arena for several plugins. "
 
     repositories {
         mavenCentral()
@@ -42,29 +46,37 @@ dependencies {
     implementation(project("slimeworldplugin"))
 }
 
-//val mcVersion = "1.8.8"
-//val runDirectoryDir: String by if (project.hasProperty("runPaper.runDirectory")) {
-//    property<String>("runPaper.runDirectory")
-//} else {
-//    "${project.rootProject.projectDir}/.run"
-//}
-//val runServerJar: String? by if (project.hasProperty("runPaper.serverJar")) {
-//    property<String>("runPaper.serverJar")
-//} else {
-//    null
-//}
-//
-//tasks.runServer {
-//    minecraftVersion(mcVersion)
-//    if (runServerJar != null) {
-//        serverJar(runDirectory.file(runServerJar as String))
-//    }
-//    runDirectory.set(file(runDirectoryDir))
-//    jvmArgs("-javaagent:slimeworldmanager-classmodifier-2.2.1.jar")
-//}
+val mcVersion = "1.8.8"
+
+tasks.runServer {
+    val runVersion = System.getenv("SERV_VERSION") ?: mcVersion
+    val runDirectoryDir = System.getenv("SERV_RUN_DIR") ?: ".run"
+    val runServerJar: String? = System.getenv("SERV_JAR")
+    val runJvmArgs: String? = System.getenv("SERV_JVM_ARGS")
+
+    dependsOn(shadowDevJar)
+    pluginJars(shadowDevJar.get().archiveFile)
+
+    minecraftVersion(runVersion)
+
+    runServerJar?.let { serverJar(runDirectory.file(it)) }
+    runJvmArgs?.let { jvmArgs(it) }
+
+    runDirectory.set(rootProject.file(runDirectoryDir))
+}
 
 tasks.processResources {
-    expand("pluginVersion" to project.version, "commit" to getGitHash(), "buildDate" to getDate())
+    expand("pluginVersion" to versionWithGit, "commit" to getGitHash(), "buildDate" to getDate())
+}
+
+val shadowDevJar = tasks.register<ShadowJar>("shadowDevJar") {
+    description = "Create a unrelocated JAR for run-paper"
+
+    from(sourceSets.main.map { it.output })
+    configurations = project.configurations.runtimeClasspath.map { listOf(it) }
+
+    archiveClassifier = "dev"
+    archiveBaseName.set(rootProject.name)
 }
 
 val relocatePackage = "cc.happyareabean.swmhook.libs"
@@ -79,6 +91,7 @@ tasks.shadowJar {
     relocate("org.semver4j", "${relocatePackage}.semver4j")
     relocate("org.yaml", "${relocatePackage}.yaml")
     relocate("revxrsal.commands", "${relocatePackage}.commands")
+    relocate("com.infernalsuite.asp.loaders", "${relocatePackage}.asp.loaders")
 }
 
 tasks.build {
@@ -117,5 +130,26 @@ publishing {
 
             version = versionOnly
         }
+    }
+}
+
+tasks.register("printGitHash") {
+    description = "Print git hash commit"
+    doLast {
+        println(getGitHash())
+    }
+}
+
+tasks.register("printVersion") {
+    description = "Print version without commit hash"
+    doLast {
+        println(version)
+    }
+}
+
+tasks.register("printFullVersion") {
+    description = "Print version with commit hash"
+    doLast {
+        println(versionWithGit)
     }
 }
