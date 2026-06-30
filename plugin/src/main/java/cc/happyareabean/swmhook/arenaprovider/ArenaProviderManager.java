@@ -12,6 +12,8 @@ import org.semver4j.Semver;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -121,7 +123,7 @@ public class ArenaProviderManager {
 	}
 
 	public void checkFailedWorld() {
-		if (loadFailed.size() == 0)
+		if (loadFailed.isEmpty())
 			return;
 
 		Arrays.asList(
@@ -170,15 +172,20 @@ public class ArenaProviderManager {
 						try {
 							Class<?> clazz = Class.forName(className, true, new ProviderClassLoader(modulesFolder));
 							if (ArenaProvider.class.isAssignableFrom(clazz)) {
-								ArenaProvider provider = (ArenaProvider) clazz.newInstance();
+								Constructor<ArenaProvider> constructor = (Constructor<ArenaProvider>) clazz.getConstructor();
+								ArenaProvider provider = constructor.newInstance();
 								this.setProvider(provider);
 								jar.close();
 								return true;
 							}
 						} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 							e.printStackTrace();
-						}
-					}
+						} catch (InvocationTargetException e) {
+                            throw new RuntimeException(e);
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
