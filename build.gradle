@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'com.gradleup.shadow' version '8.3.5'
-    id "xyz.jpenilla.run-paper" version "2.3.1"
+    id 'com.gradleup.shadow' version '9.3.2'
+    id "xyz.jpenilla.run-paper" version "3.0.2"
 }
 
 def versionOnly = property("version")
@@ -26,7 +26,7 @@ String getDate() {
 allprojects {
     group = 'cc.happyareabean'
     version = versionWithGit
-    description = 'SWMHook'
+    description = 'SlimeHook is a paper plugin that utilize SlimeWorldManager/AdvancedSlimePaper for generating template world as an arena for several plugins. '
 
     repositories {
         mavenCentral()
@@ -57,14 +57,14 @@ def runDirectoryDir = project.hasProperty('runPaper.runDirectory') ? property('r
 def runServerJar = project.hasProperty('runPaper.serverJar') ? property('runPaper.serverJar') : null
 
 tasks.runServer {
-        // Configure the Minecraft version for our task.
-        // This is the only required configuration besides applying the plugin.
-        // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion(mcVersion)
-        if (runServerJar != null)
-            serverJar(runDirectory.file(runServerJar as String))
-        runDirectory.set(file(runDirectoryDir))
-        jvmArgs '-javaagent:slimeworldmanager-classmodifier-2.2.1.jar'
+    // Configure the Minecraft version for our task.
+    // This is the only required configuration besides applying the plugin.
+    // Your plugin's jar (or shadowJar if present) will be used automatically.
+    minecraftVersion(mcVersion)
+    if (runServerJar != null)
+        serverJar(runDirectory.file(runServerJar as String))
+    runDirectory.set(file(runDirectoryDir))
+    jvmArgs '-javaagent:slimeworldmanager-classmodifier-2.2.1.jar'
 }
 
 tasks.processResources {
@@ -120,7 +120,7 @@ publishing {
     }
     publications {
         maven(MavenPublication) { publication ->
-            project.shadow.component(publication)
+            from components.shadow
 
             version = versionOnly
         }
