@@ -2,43 +2,43 @@ package cc.happyareabean.swmhook.hook.impl;
 
 import cc.happyareabean.swmhook.event.SWMWorldLoadedEvent;
 import cc.happyareabean.swmhook.hook.HookAdapter;
-import com.infernalsuite.aswm.api.AdvancedSlimePaperAPI;
-import com.infernalsuite.aswm.api.exceptions.CorruptedWorldException;
-import com.infernalsuite.aswm.api.exceptions.NewerFormatException;
-import com.infernalsuite.aswm.api.exceptions.UnknownWorldException;
-import com.infernalsuite.aswm.api.loaders.SlimeLoader;
-import com.infernalsuite.aswm.api.world.SlimeWorld;
-import com.infernalsuite.aswm.api.world.properties.SlimeProperties;
-import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
-import com.infernalsuite.aswm.plugin.SWPlugin;
+import com.infernalsuite.asp.api.AdvancedSlimePaperAPI;
+import com.infernalsuite.asp.api.exceptions.CorruptedWorldException;
+import com.infernalsuite.asp.api.exceptions.NewerFormatException;
+import com.infernalsuite.asp.api.exceptions.UnknownWorldException;
+import com.infernalsuite.asp.api.world.SlimeWorld;
+import com.infernalsuite.asp.api.world.properties.SlimeProperties;
+import com.infernalsuite.asp.api.world.properties.SlimePropertyMap;
+import com.infernalsuite.asp.loaders.file.FileLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 public class SlimeWorldPluginHookAdapter extends HookAdapter {
 
+    private final FileLoader fileLoader;
     private final Logger log = LogManager.getLogger();
-    private final SWPlugin plugin = (SWPlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldPlugin");
     private final AdvancedSlimePaperAPI asp = AdvancedSlimePaperAPI.instance();
+
+    public SlimeWorldPluginHookAdapter(JavaPlugin plugin) {
+        super(plugin);
+        fileLoader = new FileLoader(new File(plugin.getDataFolder(), "slimehook_worlds"));
+    }
 
     @Override
     public boolean isLoaderValid(String loader) {
-        return plugin.getLoaderManager().getLoader(loader) != null;
+        return fileLoader != null;
     }
 
     @Override
     public boolean isWorldExist(String worldName, String loader) {
-        try {
-            return plugin.getLoaderManager().getLoader(loader).worldExists(worldName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return fileLoader.worldExists(worldName);
     }
 
     @Override
@@ -48,34 +48,32 @@ public class SlimeWorldPluginHookAdapter extends HookAdapter {
 
     @Override
     public void loadWorld(String templateWorldName, String worldName, String loaderName) {
-        SlimeLoader loader = plugin.getLoaderManager().getLoader(loaderName);
-
         try {
             long start = System.currentTimeMillis();
 
-            if (loader == null) {
-                log.error("Invalid data source " + loaderName);
+            if (fileLoader == null) {
+                log.error("Invalid data source {}", loaderName);
             }
 
             CompletableFuture.runAsync(() -> {
                 try {
                     SlimeWorld world = asp.getLoadedWorld(templateWorldName) == null ?
-                            asp.readWorld(loader, templateWorldName, false, createPropertyMap(0, 100, 0)) :
+                            asp.readWorld(fileLoader, templateWorldName, false, createPropertyMap(0, 100, 0)) :
                             asp.getLoadedWorld(templateWorldName);
                     SlimeWorld slimeWorld = world.clone(worldName);
 
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         asp.loadWorld(slimeWorld, true);
 
-                        log.info(ChatColor.GREEN + "World " + ChatColor.YELLOW + worldName + ChatColor.GREEN + " loaded and generated in " + (System.currentTimeMillis() - start) + "ms!");
+                        log.info("World {} loaded and generated in {}ms!", worldName, System.currentTimeMillis() - start);
                         Bukkit.getPluginManager().callEvent(new SWMWorldLoadedEvent(templateWorldName, worldName, true));
                     });
-                } catch (UnknownWorldException | CorruptedWorldException | NewerFormatException | IOException ex) {
-                    log.error(ChatColor.RED + "Failed to generate world " + worldName + ": " + ex.getMessage() + ".", ex);
+                } catch (IOException | UnknownWorldException | CorruptedWorldException | NewerFormatException ex) {
+                    log.error("Failed to generate world {}: {}.", worldName, ex.getMessage(), ex);
                 }
             });
         } catch (Throwable ex) {
-            log.error(ChatColor.RED + "Failed to generate world " + worldName + ": " + ex.getMessage() + ".", ex);
+            log.error("Failed to generate world {}: {}.", worldName, ex.getMessage(), ex);
         }
     }
 
