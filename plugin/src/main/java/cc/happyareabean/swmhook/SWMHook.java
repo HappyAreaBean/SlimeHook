@@ -51,7 +51,7 @@ public class SWMHook extends JavaPlugin {
 		worldsList = new SWMHWorldsList(new File(this.getDataFolder(), "worlds.yml").toPath());
 
 		if (worldsList.getWorlds().size() == 1) {
-			if (worldsList.getWorlds().get(0).getTemplateName().equalsIgnoreCase(Constants.DEFAULT_WORLDS_STRING)) {
+			if (worldsList.getWorlds().getFirst().getTemplateName().equalsIgnoreCase(Constants.DEFAULT_WORLDS_STRING)) {
 				log("====================================================================");
 				log("Look like this is your first time running SWMHook.");
 				log("SWMHook will not load anything until you configure your 'worlds.yml' properly!");
@@ -165,7 +165,7 @@ public class SWMHook extends JavaPlugin {
 	}
 
 	public void unLoadAllSWMHWorld() {
-		if (worldsList.getWorlds().get(0).getTemplateName().equalsIgnoreCase("default")) return;
+		if (worldsList.getWorlds().getFirst().getTemplateName().equalsIgnoreCase("default")) return;
 		worldsList.getWorlds().forEach(world -> {
 
 			if (world.getAmount() == 0) return;
