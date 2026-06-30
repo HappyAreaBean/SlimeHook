@@ -7,13 +7,12 @@ repositories {
     maven { url = 'https://repo.infernalsuite.com/repository/maven-snapshots/' }
 }
 
-def mcVersion = "1.21.1"
+def mcVersion = "1.21.11"
 
 dependencies {
     compileOnly(project(":core"))
 
-    compileOnly "org.spigotmc:spigot-api:$mcVersion-R0.1-SNAPSHOT"
-    compileOnly "org.spigotmc:spigot:$mcVersion-R0.1-SNAPSHOT"
+    compileOnly("io.papermc.paper:paper-api:$mcVersion-R0.1-SNAPSHOT")
 
     compileOnly 'com.infernalsuite.asp:api:4.0.0-SNAPSHOT'
     implementation 'com.infernalsuite.asp:file-loader:4.0.0-SNAPSHOT'

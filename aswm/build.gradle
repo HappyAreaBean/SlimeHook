@@ -12,9 +12,7 @@ def mcVersion = "1.20.4"
 dependencies {
     compileOnly(project(":core"))
 
-    compileOnly "org.spigotmc:spigot-api:$mcVersion-R0.1-SNAPSHOT"
-    compileOnly "org.spigotmc:spigot:$mcVersion-R0.1-SNAPSHOT"
-
+    compileOnly("io.papermc.paper:paper-api:$mcVersion-R0.1-SNAPSHOT")
     compileOnly "com.infernalsuite.aswm:api:$mcVersion-R0.1-SNAPSHOT"
     //compileOnly "com.infernalsuite.aswm:plugin:$mcVersion-R0.1-SNAPSHOT"
 

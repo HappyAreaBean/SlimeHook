@@ -31,6 +31,7 @@ allprojects {
     repositories {
         mavenCentral()
 
+        maven { url = uri('https://repo.papermc.io/repository/maven-public/') }
         maven { url = uri('https://repo.fantasyrealms.net/other-snapshots') }
         maven { url = uri('https://repo.fantasyrealms.net/other-libraries') }
         maven { url = uri('https://repo.fantasyrealms.net/releases') }
