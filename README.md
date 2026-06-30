@@ -5,7 +5,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/HappyAreaBean/SlimeHook">
-    <img src="https://image-delivery.fantasyrealms.net/7WmZwivjF-y1XVg_2hCz6t1DrIxglpP2EXdLdenG8js/czM6Ly9iZWFuLWFzc2V0cy9vdGhlci9zdGF0aWMvc2xpbWVob29rL2Jhbm5lci5wbmc" alt="Logo" width="1039">
+    <img src="https://image-delivery.fantasyrealms.net/S42BLYGE4JMUlC9IoXbloPkO7jWKFh7S5swIpLA6-yU/czM6Ly9iZWFuLWFzc2V0cy9vdGhlci9zdGF0aWMvc2xpbWVob29rL2Jhbm5lci5wbmc.png" alt="Logo" width="1039">
   </a>
 
 <h3 align="center">SlimeHook</h3>
