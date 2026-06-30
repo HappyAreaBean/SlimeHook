@@ -58,7 +58,23 @@
   </ol>
 </details>
 
+<details>
+  <summary>Support Matrix (Theoretically)</summary>
 
+## Support Matrix (Theoretically)
+
+| Minecraft Version | Slime World Manager                                                           | SlimeHook Version | Note                              |
+|-------------------|-------------------------------------------------------------------------------|-------------------|-----------------------------------|
+| 1.8.X-1.14        | [SlimeWorldManager][slimeworldmanager]                                        | 1.6               | Required SlimeWorldManager Plugin |
+| 1.8.X             | [Swofty World Manager][swoftyworldmanager]                                    | 1.6               | Required SlimeWorldManager Plugin |
+| 1.17.1/1.18.1     | [PaulBGD's Advanced Slime World Manager][advancedslimeworldmanager-paulbgd]   | 1.6               | Required SlimeWorldManager Plugin |
+| 1.18.2-1.19.2     | [Paul1998's Advanced Slime World Manager][advancedslimeworldmanager-paul1998] | 1.6               | Required SlimeWorldManager Plugin |
+| 1.20.2/4/6        | [AdvancedSlimePaper][advancedslimepaper]                                      | 1.6               | Required SlimeWorldManager Plugin |
+| 1.21-1.21.3       | [AdvancedSlimePaper][advancedslimepaper]                                      | 1.6               | Required SlimeWorldManager Plugin |
+| 1.21.4-1.21.11    | [AdvancedSlimePaper][advancedslimepaper]                                      | 2.0 (WIP)         |                                   |
+| 26.1-26.2         | [AdvancedSlimePaper][advancedslimepaper]                                      | 2.0 (WIP)         |                                   |
+
+</details>
 
 <!-- ABOUT THE PROJECT -->
 ## About SlimeHook
@@ -217,3 +233,9 @@ Project Link: [https://github.com/HappyAreaBean/SlimeHook](https://github.com/Ha
 
 [ko-fi-url]: https://ko-fi.com/happyareabean
 [ko-fi-badge]: https://ko-fi.com/img/githubbutton_sm.svg
+
+[slimeworldmanager]: https://www.spigotmc.org/resources/69974/
+[advancedslimeworldmanager-paulbgd]: https://github.com/PaulBGD/Advanced-Slime-World-Manager
+[advancedslimeworldmanager-paul1998]: https://github.com/Paul19988/Advanced-Slime-World-Manager
+[advancedslimepaper]: https://github.com/InfernalSuite/AdvancedSlimePaper
+[swoftyworldmanager]: https://github.com/Swofty-Developments/Continued-Slime-World-Manager
