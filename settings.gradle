@@ -1,4 +1,4 @@
-rootProject.name = 'SWMHook'
+rootProject.name = 'SlimeHook'
 include 'aswm'
 include 'plugin'
 include 'core'
