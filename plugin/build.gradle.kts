@@ -1,0 +1,58 @@
+plugins {
+    java
+    `maven-publish`
+    id("net.kyori.blossom") version "2.2.0"
+    id("net.kyori.indra.git")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly(project(":core"))
+    compileOnly(project(":aswm"))
+    compileOnly(project(":slimeworldplugin"))
+
+    implementation("com.github.HappyAreaBean.ConfigLib:configlib-core:2.3.1")
+
+    implementation("com.github.Revxrsal.Lamp:common:3.1.9")
+    implementation("com.github.Revxrsal.Lamp:bukkit:3.1.9")
+    implementation("net.kyori:adventure-api:4.17.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
+    implementation("org.bstats:bstats-bukkit:3.0.0")
+    implementation("org.semver4j:semver4j:4.3.0")
+
+    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT")
+
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("com.grinderwolf:slimeworldmanager-api:2.2.1")
+    compileOnly("com.grinderwolf:slimeworldmanager-plugin:2.2.1")
+
+    compileOnly("com.github.Swofty-Developments.Continued-Slime-World-Manager:swoftyworldmanager-api:4.0.0")
+
+    testImplementation(platform("org.junit:junit-bom:5.9.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("pluginVersion", version.toString())
+                property("commit", getGitHash())
+                property("buildDate", getDate())
+            }
+        }
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+
+tasks.compileJava {
+    options.compilerArgs.addAll(listOf("-parameters"))
+    options.encoding = "UTF-8"
+}
