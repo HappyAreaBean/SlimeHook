@@ -22,9 +22,11 @@ public class HookAdapterManager {
 	public HookAdapterManager(JavaPlugin plugin) {
 		PluginManager pm = Bukkit.getPluginManager();
 
-		if (pm.isPluginEnabled("SlimeWorldPlugin")) {
-			register(new SlimeWorldPluginHookAdapter());
+		try {
+			Class.forName("com.infernalsuite.asp.api.AdvancedSlimePaperAPI");
+			register(new SlimeWorldPluginHookAdapter(plugin));
 			return;
+		} catch (ClassNotFoundException ignored) {
 		}
 
 		if (pm.isPluginEnabled("SlimeWorldManager")) {
