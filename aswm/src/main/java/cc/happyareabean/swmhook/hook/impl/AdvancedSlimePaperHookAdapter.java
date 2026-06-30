@@ -10,7 +10,6 @@ import com.infernalsuite.aswm.api.world.properties.SlimePropertyMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -67,10 +66,10 @@ public class AdvancedSlimePaperHookAdapter extends HookAdapter {
 
             plugin.loadWorld(finalWorld);
 
-            log.info(ChatColor.GREEN + "World " + ChatColor.YELLOW + worldName + ChatColor.GREEN + " loaded and generated in " + (System.currentTimeMillis() - start) + "ms!");
+            log.info("World {} loaded and generated in {}ms!", worldName, System.currentTimeMillis() - start);
             Bukkit.getScheduler().runTask((Plugin) plugin, () -> Bukkit.getPluginManager().callEvent(new SWMWorldLoadedEvent(templateWorldName, worldName, true)));
         } catch (Throwable ex) {
-            log.error(ChatColor.RED + "Failed to generate world " + worldName + ": " + ex.getMessage() + ".", ex);
+            log.error("Failed to generate world {}: {}.", worldName, ex.getMessage(), ex);
         }
     }
 
