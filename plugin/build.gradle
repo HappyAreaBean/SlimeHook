@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'net.kyori.blossom' version "1.3.1"
+    id 'net.kyori.blossom' version "2.2.0"
     id "io.freefair.lombok" version "8.4"
 }
 
@@ -51,10 +51,16 @@ String getDate() {
     return formattedDate
 }
 
-blossom {
-    replaceToken("\${pluginVersion}", version.toString())
-    replaceToken("\${commit}", getGitHash().toString())
-    replaceToken("\${buildDate}", getDate().toString())
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("pluginVersion", version.toString())
+                property("commit", getGitHash().toString())
+                property("buildDate", getDate().toString())
+            }
+        }
+    }
 }
 
 test {
