@@ -4,8 +4,19 @@ import cc.happyareabean.swmhook.objects.SWMHWorld;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.World;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import javax.annotation.Nullable;
 
 public abstract class HookAdapter {
+	public JavaPlugin plugin;
+
+	public HookAdapter(JavaPlugin plugin) {
+		this.plugin = plugin;
+	}
+
+	public HookAdapter() {
+	}
 
 	/**
 	 * This will determine whether can this provider can be register or not, default is true.
@@ -70,4 +81,8 @@ public abstract class HookAdapter {
 	 */
 	public abstract String getProviderAuthor();
 
+	@Nullable
+	public JavaPlugin getPlugin() {
+		return plugin;
+	}
 }
