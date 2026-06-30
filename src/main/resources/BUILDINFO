@@ -1,0 +1,3 @@
+Version: ${pluginVersion}
+Commit: ${commit}
+Build Created: ${buildDate}

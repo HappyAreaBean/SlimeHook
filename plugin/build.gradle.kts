@@ -18,8 +18,8 @@ dependencies {
 
     implementation("com.github.Revxrsal.Lamp:common:3.1.9")
     implementation("com.github.Revxrsal.Lamp:bukkit:3.1.9")
-    implementation("net.kyori:adventure-api:4.17.0")
-    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
+    compileOnly("net.kyori:adventure-api:4.17.0")
+    compileOnly("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("org.bstats:bstats-bukkit:3.0.0")
     implementation("org.semver4j:semver4j:4.3.0")
 
@@ -42,7 +42,7 @@ sourceSets {
             javaSources {
                 property("pluginVersion", version.toString())
                 property("commit", getGitHash())
-                property("buildDate", getDate())
+                property("buildDate", getBuildCreated())
             }
         }
     }

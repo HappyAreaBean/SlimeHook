@@ -1,18 +1,12 @@
-import java.text.SimpleDateFormat
-import java.util.Date
 import net.kyori.indra.git.IndraGitExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
+import java.time.Instant
 
 fun Project.getGitHash(): String =
     extensions.getByType(IndraGitExtension::class)
-        .commit()
-        .get()
-        .name()
-        .toString()
-        .trim()
+        .commit().orNull?.name ?: "unknown"
 
 fun Project.getGitSHashShort(): String = getGitHash().substring(0, 12)
 
-fun Project.getDate(): String =
-    SimpleDateFormat("yyyy.MM.dd").format(Date())
+fun Project.getBuildCreated(): String = Instant.now().toString()

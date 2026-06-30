@@ -3,10 +3,12 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     java
     `maven-publish`
-    id("com.gradleup.shadow") version "9.4.3"
     id("xyz.jpenilla.run-paper") version "3.0.2"
     id("io.freefair.lombok") version "9.5.0"
+    id("com.gradleup.shadow")
     id("net.kyori.indra.git")
+    id("plugin-yml-bukkit")
+    id("plugin-yml-paper")
 }
 
 val group = property("group")
@@ -18,8 +20,6 @@ allprojects {
 
     group = group
     version = versionOnly
-    description =
-        "SlimeHook is a paper plugin that utilize SlimeWorldManager/AdvancedSlimePaper for generating template world as an arena for several plugins. "
 
     repositories {
         mavenCentral()
@@ -66,7 +66,7 @@ tasks.runServer {
 }
 
 tasks.processResources {
-    expand("pluginVersion" to versionWithGit, "commit" to getGitHash(), "buildDate" to getDate())
+    expand("pluginVersion" to versionOnly, "commit" to getGitHash(), "buildDate" to getBuildCreated())
 }
 
 val shadowDevJar = tasks.register<ShadowJar>("shadowDevJar") {
@@ -85,13 +85,12 @@ tasks.shadowJar {
     archiveClassifier.set("")
     archiveVersion.set("")
 
-    relocate("de.exlll.configlib", "${relocatePackage}.configlib")
-    relocate("net.kyori", "${relocatePackage}.kyori")
-    relocate("org.bstats", "${relocatePackage}.bstats")
-    relocate("org.semver4j", "${relocatePackage}.semver4j")
-    relocate("org.yaml", "${relocatePackage}.yaml")
-    relocate("revxrsal.commands", "${relocatePackage}.commands")
-    relocate("com.infernalsuite.asp.loaders", "${relocatePackage}.asp.loaders")
+    commonRelocate("de.exlll.configlib")
+    commonRelocate("org.bstats")
+    commonRelocate("org.semver4j")
+    commonRelocate("org.yaml")
+    commonRelocate("revxrsal.commands")
+    commonRelocate("com.infernalsuite.asp.loaders")
 }
 
 tasks.build {
@@ -135,21 +134,27 @@ publishing {
 
 tasks.register("printGitHash") {
     description = "Print git hash commit"
+
+    val gitHash = providers.provider { getGitHash() }
     doLast {
-        println(getGitHash())
+        println(gitHash.get())
     }
 }
 
 tasks.register("printVersion") {
     description = "Print version without commit hash"
+
+    val version = providers.gradleProperty("version")
     doLast {
-        println(version)
+        println(version.get())
     }
 }
 
 tasks.register("printFullVersion") {
     description = "Print version with commit hash"
+
+    val versionGit = providers.provider { versionWithGit }
     doLast {
-        println(versionWithGit)
+        println(versionGit.get())
     }
 }
