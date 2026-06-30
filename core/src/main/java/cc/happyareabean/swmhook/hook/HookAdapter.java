@@ -85,4 +85,31 @@ public abstract class HookAdapter {
 	public JavaPlugin getPlugin() {
 		return plugin;
 	}
+
+	/**
+	 * Load the adapter configuration from file or data source.
+	 * <br><br>
+	 * This method is called to initialize or reload the adapter's configuration.
+	 */
+	public void loadAdapterConfig() {
+
+	}
+
+	/**
+	 * Reload the adapter configuration from file or data source.
+	 * <br><br>
+	 * This method is called when the adapter needs to refresh its configuration.
+	 */
+	public void reloadAdapterConfig() {
+
+	}
+
+	/**
+	 * Save the adapter configuration to file or data source.
+	 * <br><br>
+	 * This method is called to persist the adapter's current configuration.
+	 */
+	public void saveAdapterConfig() {
+
+	}
 }
