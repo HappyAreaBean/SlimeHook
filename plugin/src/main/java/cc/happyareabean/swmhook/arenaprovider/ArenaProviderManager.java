@@ -147,7 +147,8 @@ public class ArenaProviderManager {
 				provider.getProviderName(), provider.getProviderVersion(), provider.getProviderAuthor()));
 	}
 
-	private boolean loadArenaProviders(JavaPlugin plugin, String folder) {
+	@SuppressWarnings("unchecked")
+    private boolean loadArenaProviders(JavaPlugin plugin, String folder) {
 		File modulesFolder = new File(plugin.getDataFolder(), folder);
 		if (!modulesFolder.exists()) {
 			modulesFolder.mkdir();
